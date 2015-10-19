@@ -118,6 +118,9 @@ Pixel** get_image(FILE* img, Pixel ** newImg,int* height, int* width) {
     fclose(img);
     return newImg;
 }
+void func (){
+    printf("teste\n");
+}
 
 
 int main(int argc, char const *argv[])
