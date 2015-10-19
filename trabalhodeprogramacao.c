@@ -14,6 +14,54 @@ int saturacao(int v) {
     return v;
 }
 
+Pixel** applyFilterTresholding(Pixel** filtered, Pixel** newImg,int height, int width) {
+    int i;
+    int b;
+    int acc;
+    long int tresh = 0, treshr = 0,treshg = 0,treshb = 0;
+        for (i = 0; i < height ; ++i)
+    {
+        for ( b = 0; b < width ; ++b)
+        {
+            treshr = (newImg[i][b].r/10) + treshr;
+            treshg = (newImg[i][b].g/10) + treshg;
+            treshb = (newImg[i][b].b/10) + treshb;
+
+        }
+    }
+    tresh = treshr/(height*width);
+    tresh += treshg/(height*width);
+    tresh+= treshb/(height*width);
+    tresh = (tresh*10)/3;
+    printf("treshrr = %li\n",tresh);
+    printf("treshr = %li\ntreshg = %li\ntreshb = %li",treshr,treshg,treshb);
+
+
+    for (i = 0; i < height ; ++i)
+    {
+        for ( b = 0; b < width; ++b)
+        {
+            if ((newImg[i][b].r + newImg[i][b].g + newImg[i][b].b)/3 > tresh)
+            {
+             newImg[i][b].r = 255;
+             newImg[i][b].g = 255;
+             newImg[i][b].b = 255;
+            }
+            else{
+                newImg[i][b].r = 1;
+                newImg[i][b].g = 1;
+                newImg[i][b].b = 1;
+            }
+            filtered[i][b].r = newImg[i][b].r;
+            filtered[i][b].g = newImg[i][b].g;
+            filtered[i][b].b = newImg[i][b].b;
+        }
+    }
+
+    return filtered;
+}
+
+
 Pixel** applyFilterBlur(Pixel** filtered, Pixel** newImg,int height, int width) {
     int i;
     int b;
@@ -140,7 +188,7 @@ int main(int argc, char const *argv[])
 
     printf("%i %i\n",height,width);
 
-    filteredImg = applyFilterBlur(filteredImg, newImg,height,width);
+    filteredImg = applyFilterTresholding(filteredImg, newImg,height,width);
     printf("name: 'new_imppm'\n");
     save_image("new_img.ppm",filteredImg,height,width);
     printf("%i %i %i\n",filteredImg[5][5].r,filteredImg[5][5].g,filteredImg[5][5].b);
